@@ -4,6 +4,7 @@ services:
         arguments: [~, ~, ~]
         calls:
             - [setFormBuilderManager, ['@sherlockode_advanced_content.form_builder_manager']]
+            - [setContentTypeManager, ['@sherlockode_advanced_content.content_type_manager']]
             - [setTemplate, [edit, '@@SherlockodeSonataAdvancedContent/ContentType/edit.html.twig']]
             - [setTranslationDomain, ['AdvancedContentBundle']]
         tags:

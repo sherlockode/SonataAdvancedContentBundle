@@ -14,3 +14,10 @@
         </div>
     </div>
 {% endblock %}
+
+{% block sonata_form_attributes %}
+    class="edit-content-type"
+    {% if object.id %}
+    data-change-type-url="{{ path('sherlockode_acb_content_type_change_field_type', {'contentTypeId': object.id}) }}"
+    {% endif %}
+{% endblock %}
