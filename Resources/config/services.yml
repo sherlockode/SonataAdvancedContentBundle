@@ -6,6 +6,7 @@ services:
             - [setTranslationDomain, ['AdvancedContentBundle']]
         tags:
             - { name: sonata.admin, manager_type: orm, group: content.label, label: content.label, show_in_dashboard: true}
+
     sherlockode_advanced_content.admin.page_type:
         class: Sherlockode\SonataAdvancedContentBundle\Admin\PageTypeAdmin
         arguments: [~, ~, ~]
@@ -13,6 +14,7 @@ services:
             - [setTranslationDomain, ['AdvancedContentBundle']]
         tags:
             - { name: sonata.admin, manager_type: orm, group: content.label, label: page_type.label, show_in_dashboard: true}
+
     sherlockode_advanced_content.admin.page:
         class: Sherlockode\SonataAdvancedContentBundle\Admin\PageAdmin
         arguments: [~, ~, ~]
@@ -22,7 +24,6 @@ services:
             - [setTemplate, [edit, '@@SherlockodeSonataAdvancedContent/Page/edit.html.twig']]
         tags:
             - { name: sonata.admin, manager_type: orm, group: content.label, label: page.label, show_in_dashboard: true}
-
 
     sherlockode_advanced_content.admin.page_extesnion:
         class: Sherlockode\SonataAdvancedContentBundle\Admin\Extension\PageExtension
@@ -35,3 +36,27 @@ services:
         class: Sherlockode\SonataAdvancedContentBundle\EventListener\MenuBuilderListener
         tags:
             - { name: kernel.event_listener, event: sonata.admin.event.configure.menu.sidebar, method: addMenuItems }
+
+    sherlockode_advanced_content.form_contractor.content:
+        class: Sherlockode\SonataAdvancedContentBundle\Admin\FormContractor
+        calls:
+            - [ setFormType, [ 'Sherlockode\AdvancedContentBundle\Form\Type\ContentType' ] ]
+        arguments:
+            - '@form.factory'
+            - '@form.registry'
+
+    sherlockode_advanced_content.form_contractor.page_type:
+        class: Sherlockode\SonataAdvancedContentBundle\Admin\FormContractor
+        calls:
+            - [ setFormType, [ 'Sherlockode\AdvancedContentBundle\Form\Type\PageTypeType' ] ]
+        arguments:
+            - '@form.factory'
+            - '@form.registry'
+
+    sherlockode_advanced_content.form_contractor.page:
+        class: Sherlockode\SonataAdvancedContentBundle\Admin\FormContractor
+        calls:
+            - [ setFormType, [ 'Sherlockode\AdvancedContentBundle\Form\Type\PageType' ] ]
+        arguments:
+            - '@form.factory'
+            - '@form.registry'

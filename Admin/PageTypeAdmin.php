@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class PageTypeAdmin extends AbstractAdmin
 {
-    public function configureFormFields(FormMapper $form)
+    public function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('name')
@@ -24,21 +24,7 @@ class PageTypeAdmin extends AbstractAdmin
             ->createNamedBuilder($this->getUniqid(), PageTypeType::class);
     }
 
-    public function getFormBuilder()
-    {
-        $formBuilder = $this->getPageTypeFormBuilder();
-        $this->defineFormBuilder($formBuilder);
-
-        return $formBuilder;
-    }
-
-    public function defineFormBuilder(FormBuilderInterface $formBuilder)
-    {
-        $formBuilder = $this->getPageTypeFormBuilder();
-        parent::defineFormBuilder($formBuilder);
-    }
-
-    public function configureListFields(ListMapper $list)
+    public function configureListFields(ListMapper $list): void
     {
         $list
             ->add('name', null, ['label' => 'page_type.form.name'])
@@ -56,7 +42,7 @@ class PageTypeAdmin extends AbstractAdmin
      *
      * @return string
      */
-    public function toString($object)
+    public function toString($object): string
     {
         if ($object instanceof PageTypeInterface && $object->getName()) {
             return $object->getName();

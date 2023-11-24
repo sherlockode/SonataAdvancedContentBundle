@@ -6,6 +6,7 @@ use Sherlockode\AdvancedContentBundle\Form\Type\ContentType;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -13,15 +14,15 @@ class ContentAdmin extends AbstractAdmin
 {
     protected $baseRouteName = 'admin_afb_content';
 
-    public function getFormTheme()
+    protected function configure(): void
     {
-        return array_merge(
+        $this->setFormTheme(array_merge(
             parent::getFormTheme(),
             ['@SherlockodeAdvancedContent/Form/content.html.twig']
-        );
+        ));
     }
 
-    public function configureFormFields(FormMapper $form)
+    public function configureFormFields(FormMapper $form): void
     {
         $form->tab('content.form.tabs.label')
             ->with('content.form.tabs.general', [
@@ -42,31 +43,7 @@ class ContentAdmin extends AbstractAdmin
             ->end(); // init the groups data for this admin class
     }
 
-    /**
-     * Create ContentType form
-     *
-     * @return FormBuilderInterface
-     *
-     * @throws \Exception
-     */
-    private function getCustomFormBuilder()
-    {
-        return $this->getFormContractor()
-            ->getFormFactory()
-            ->createNamedBuilder($this->getUniqid(), ContentType::class, null, $this->formOptions);
-    }
-
-    public function getFormBuilder()
-    {
-        $this->formOptions['data_class'] = $this->getClass();
-
-        $formBuilder = $this->getCustomFormBuilder();
-        $this->defineFormBuilder($formBuilder);
-
-        return $formBuilder;
-    }
-
-    public function configureListFields(ListMapper $list)
+    public function configureListFields(ListMapper $list): void
     {
         $list
             ->add('id', null, ['label' => 'content.id'])
@@ -80,9 +57,14 @@ class ContentAdmin extends AbstractAdmin
         ;
     }
 
-    public function createQuery($context = 'list')
+    /**
+     * @param ProxyQueryInterface $query
+     *
+     * @return ProxyQueryInterface
+     */
+    public function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
     {
-        $query = parent::createQuery();
+        $query = parent::configureQuery($query);
         $query->getQueryBuilder()
             ->where('o.page IS NULL');
 
@@ -94,7 +76,7 @@ class ContentAdmin extends AbstractAdmin
      *
      * @return string
      */
-    public function toString($object)
+    public function toString($object): string
     {
         if ($object instanceof ContentInterface && $object->getName()) {
             return $object->getName();

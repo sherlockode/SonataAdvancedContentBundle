@@ -17,15 +17,15 @@ class PageAdmin extends AbstractAdmin
      */
     private $localeProvider;
 
-    public function getFormTheme()
+    protected function configure(): void
     {
-        return array_merge(
+        $this->setFormTheme(array_merge(
             parent::getFormTheme(),
             ['@SherlockodeAdvancedContent/Form/content.html.twig']
-        );
+        ));
     }
 
-    public function configureFormFields(FormMapper $form)
+    public function configureFormFields(FormMapper $form): void
     {
         $form->tab('page.form.tabs.label')
             ->with('page.form.tabs.general')->end(); // init the groups data for this admin class
@@ -69,37 +69,14 @@ class PageAdmin extends AbstractAdmin
         $form->end();
     }
 
-    public function getFormBuilder()
-    {
-        $this->formOptions['data_class'] = $this->getClass();
-
-        $formBuilder = $this->getCustomFormBuilder();
-        $this->defineFormBuilder($formBuilder);
-
-        return $formBuilder;
-    }
-
-    /**
-     * Create PageType form
-     *
-     * @return FormBuilderInterface
-     *
-     * @throws \Exception
-     */
-    private function getCustomFormBuilder()
-    {
-        return $this->getFormContractor()
-            ->getFormFactory()
-            ->createNamedBuilder($this->getUniqid(), PageType::class, null, $this->formOptions);
-    }
-
-    public function configureListFields(ListMapper $list)
+    public function configureListFields(ListMapper $list): void
     {
         $list
             ->add('pageIdentifier', null, ['label' => 'page.form.page_identifier'])
             ->add('title', null, [
                 'label' => 'page.form.title',
-                'template' => '@SherlockodeSonataAdvancedContent/Page/title.html.twig'
+                'template' => '@SherlockodeSonataAdvancedContent/Page/title.html.twig',
+                'virtual_field' => true,
             ])
             ->add('status', null, [
                 'label' => 'page.form.status',
@@ -119,7 +96,7 @@ class PageAdmin extends AbstractAdmin
      *
      * @return string
      */
-    public function toString($object)
+    public function toString($object): string
     {
         if ($object instanceof PageInterface && $object->getPageIdentifier()) {
             return $object->getPageIdentifier();

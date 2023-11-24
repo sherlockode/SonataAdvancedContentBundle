@@ -15,7 +15,7 @@ class PageExtension extends AbstractAdminExtension
     private $configurationManager;
 
 
-    public function configureFormFields(FormMapper $formMapper)
+    public function configureFormFields(FormMapper $formMapper): void
     {
         if ($formMapper->has('pageType')) {
             $formMapper->tab('page.form.tabs.label')
